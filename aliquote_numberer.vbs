@@ -1,6 +1,6 @@
 ' NAME:	FreezerPro_aliquote.vbs
 ' AUTHOR: Henrik Vestin Uppsala Biobank
-' DATE: 20210315
+' DATE: 2021 03 15
 ' HISTORY: 1.0 initial version
 '		   
 '		   
