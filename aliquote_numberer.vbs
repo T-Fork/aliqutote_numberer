@@ -1,6 +1,6 @@
 ' NAME:	FreezerPro_aliquote.vbs
 ' AUTHOR: Henrik Vestin Uppsala Biobank
-' DATE: 2101
+' DATE: 20210315
 ' HISTORY: 1.0 initial version
 '		   
 '		   
@@ -47,21 +47,18 @@ objWrite.WriteLine "ParentID;ALIQUOT;() Provnummer;Sample Source;() Provtagnings
 aliquoteValue = 1	
 prevousKeyValue = ""
 For x = 0 to Ubound(arrLines) -1 'iterate array until end, -1 is because the exported csv had an empty line.
-	arrLineValues = Split(arrlines(x), ";") 'another array linesplit at each ;
-	currentKeyValue = arrLineValues(9) ' grab keyvalue from current line in arrLines
+	arrLineValues = Split(arrlines(x), ";") 'another array split at each ;
+	currentKeyValue = arrLineValues(9) ' grab keyvalue from current line in arrLinesValues
 	'wscript.Echo arrLineValues(0)
 	If currentKeyValue = prevousKeyValue then 'compare keyvalues to determine what aliquote number to set.
 		aliquoteValue = aliquoteValue + 1
 		arrLineValues(1) = aliquoteValue
-		Join(arrLineValues) ' insert aliquote number into array
 	Else
 		aliquoteValue = 1
 		arrLineValues(1) = aliquoteValue
-		Join(arrLineValues) 'insert aliquote number into array
 	End If
-newLine = arrLineValues(0) & ";" & arrLineValues(1) & ";" & arrLineValues(2) & ";" & arrLineValues(3) & ";" & arrLineValues(4) & ";" & arrLineValues(5) & ";" & arrLineValues(6) & ";" & arrLineValues(7) & ";" & arrLineValues(8) & ";" & arrLineValues(9) & ";" & arrLineValues(10) & ";" & arrLineValues(11) & ";" & arrLineValues(12) & ";" & arrLineValues(13) & ";" & arrLineValues(14) & ";" & arrLineValues(15) & ";" & arrLineValues(16) & ";" & arrLineValues(17) & ";" & arrLineValues(18) & ";" & arrLineValues(19) & ";" & arrLineValues(20)
-'wscript.Echo newLine
-objWrite.WriteLine newLine 'insert the array as a line to the outputfile
+newLine = Join(arrLineValues, ";") ' Join array into string
+objWrite.WriteLine newLine 'insert the string to the outputfile
 	
 prevousKeyValue = currentKeyValue ' used for comparison in the if statement
 	
@@ -69,9 +66,3 @@ lineNum = lineNum + 1
 wscript.Echo "Line #" & lineNum ' dont mind me i just count lines.
 Next
 objWrite.Close ' close the file
-
-
-
-
-
-
