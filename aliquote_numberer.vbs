@@ -1,7 +1,7 @@
 ' NAME:	FreezerPro_aliquote.vbs
 ' AUTHOR: Henrik Vestin Uppsala Biobank
 ' DATE: 2021 03 15
-' HISTORY: 1.0 initial version
+' HISTORY: 1.01 initial version
 '		   
 '		   
 ' COMMENT: Utgå från Sjöberg import för att skapa alikvotnumrering.
@@ -21,7 +21,7 @@ Dim x
 Dim arrLineValues
 Dim newLine
 Dim currentKeyValue
-Dim prevousKeyValue
+Dim previousKeyValue
 Dim aliquoteValue
 Dim lineNum
 
@@ -44,23 +44,23 @@ arrLines = Split(strContent, vbCrLf) 'split creates an one-dimensional array
 
 Set objWrite = objFSO.CreateTextFile(FileDestination, True) ' Create file
 objWrite.WriteLine "ParentID;ALIQUOT;() Provnummer;Sample Source;() Provtagningsdatum;() Ankomstdatum;() Nedfrysningsdatum;() Besök;Sample Type;Key;Volume;Antal miljoner celler;Kommentar;Frys;Level1;Level2;Level3;Level4;Box;Position;"
-aliquoteValue = 1	
-prevousKeyValue = ""
+aliquoteValue = 0	
+previousKeyValue = ""
 For x = 0 to Ubound(arrLines) -1 'iterate array until end, -1 is because the exported csv had an empty line.
 	arrLineValues = Split(arrlines(x), ";") 'another array split at each ;
 	currentKeyValue = arrLineValues(9) ' grab keyvalue from current line in arrLinesValues
-	'wscript.Echo arrLineValues(0)
-	If currentKeyValue = prevousKeyValue then 'compare keyvalues to determine what aliquote number to set.
-		aliquoteValue = aliquoteValue + 1
+	
+	If currentKeyValue = previousKeyValue then 'compare keyvalues to determine what aliquote number to set.
+		aliquoteValue = aliquoteValue
 		arrLineValues(1) = aliquoteValue
 	Else
-		aliquoteValue = 1
+		aliquoteValue = aliquoteValue + 1
 		arrLineValues(1) = aliquoteValue
 	End If
 newLine = Join(arrLineValues, ";") ' Join array into string
 objWrite.WriteLine newLine 'insert the string to the outputfile
 	
-prevousKeyValue = currentKeyValue ' used for comparison in the if statement
+previousKeyValue = currentKeyValue ' used for comparison in the if statement
 	
 lineNum = lineNum + 1
 wscript.Echo "Line #" & lineNum ' dont mind me i just count lines.
